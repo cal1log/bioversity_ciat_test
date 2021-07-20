@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:12.6-alpine
+    container_name: ciat_db     
+    environment:
+      - POSTGRES_HOST=db
+      - POSTGRES_DB=ciat
+      - POSTGRES_USER=ciat
+      - POSTGRES_PASSWORD=ciat  
+    ports:
+      - 5432:5432  
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+  ciat_backend:
+    build:
+      context: .
+      dockerfile: ./docker/production/ciat/ciat.Dockerfile.prod
+    container_name: ciat_back        
+    ports:
+      - 8000:8000    
+    depends_on:
+      - db  
+volumes:
+  postgres_data:        
